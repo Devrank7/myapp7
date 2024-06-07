@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: fr_sql
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: boot
+
+  redis:
+    image: redis:7
+
+  web:
+    build: .
+    command: gunicorn hope_project.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgres://postgres:boot@db:7432/fr_sql
+      REDIS_URL: redis://redis:6379/2

@@ -1,0 +1,1 @@
+web: gunicorn hope_project.wsgi --log-file -
